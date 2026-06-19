@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RFQ Processing Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="dashboard">
+
+            <!-- TOP LEFT -->
+            <section class="panel email-panel">
+                <div class="panel-header">
+                    <h2>Current Email</h2>
+                </div>
+
+                <textarea id="emailInput"
+                          placeholder="Paste email here..."></textarea>
+
+                <div class="actions">
+                    <button class="secondary" onclick="skip()">Skip</button>
+                    <button class="primary" onclick="clean()">Clean</button>
+                    <button class="success" onclick="extract()">Extract</button>
+                </div>
+            </section>
+
+            <!-- TOP RIGHT -->
+            <section class="panel data-panel">
+                <div class="panel-header">
+                    <h2>Extracted Data</h2>
+                </div>
+
+                <div class="form-grid">
+                    <input placeholder="AZIENDA" id="azienda">
+                    <input placeholder="PAESE" id="paese">
+                    <input placeholder="EMAIL" id="email">
+                    <input placeholder="CONTATTO" id="contatto">
+                    <input placeholder="TELEFONO" id="telefono">
+                    <input placeholder="ARTICOLO" id="articolo">
+                    <input placeholder="MARCA" id="marca">
+                    <input placeholder="QTA" id="qta">
+                    <input placeholder="NOTE" id="note">
+                </div>
+
+                <button class="primary full-width" onclick="searchCode()">
+                    Search Inner Code
+                </button>
+            </section>
+
+            <!-- BOTTOM -->
+            <section class="panel cleaned-panel">
+                <div class="panel-header">
+                    <h2>Cleaned Text</h2>
+                </div>
+
+                <textarea id="cleanedText"
+                          placeholder="Processed email will appear here..."></textarea>
+
+                <div class="actions">
+                    <button class="success" onclick="proceedToWeb()">
+                        Proceed to Web
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- MODAL WINDOW -->
+        <div id="reviewSection" class="hidden modal">
+
+            <div class="modal-content panel">
+
+                <h3>Review Match</h3>
+                <button class="close-btn" onclick="closeReviewModal()">
+                    ✖
+                </button>
+                <p>
+                    <strong>Company Code:</strong>
+                    <span id="companyCode"></span>
+                </p>
+
+                <table id="candidateTable">
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Inner Code</th>
+                            <th>Description</th>
+                            <th>Score</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+
+                <button class="success" onclick="selectItem()">Select</button>
+                
+            </div>
+
+        </div>
+        <!-- SIDE PANEL -->
+        <div id="detailPanel" class="hidden detail-panel panel">
+
+            <button onclick="closeDetailPanel()">✖</button>
+            <h3>ERP Details</h3>
+
+            <!-- CODMAT VRZ + DESCRIPTION -->
+            <div class="field-row cols-3" id="itemID">
+                <div class="field one_quarter">
+                    <label for="innerCode">CODMAT</label>
+                    <input id="innerCode" placeholder="CODICE VRZ">
+                </div>
+
+                <div class="field three_quarters">
+                    <label for="description">DESCRIPTION</label>
+                    <input id="description" placeholder="DESCRIPTION">
+                </div>
+
+                <div class="field three_quarters">
+                    <label for="grpscoven">GRP SCO VEN</label>
+                    <input id="grpscoven" placeholder="GRP SCO VEN">
+                </div>
+            </div>
+            <div id="erpContent">
+
+                <!-- GROSS PRICE - NET PRICE - DISC1 - DISC2 -->
+                <div class="field-row cols-7-pzo form-grid">
+                    <div class="field">
+                        <label for="grossPrice">GROSS PRICE</label>
+                        <input id="grossPrice">
+                    </div>
+                    <div class="field">
+                        <label for="netPrice">NET PRICE</label>
+                        <input id="netPrice">
+                    </div>
+                    <div class="field">
+                        <label for="discount1">SCO 1</label>
+                        <input id="discount1">
+                    </div>
+                    <div class="field">
+                        <label for="discount2">SCO 2</label>
+                        <input id="discount2">
+                    </div>
+                    <div class="field">
+                        <label for="discount3">SCO 3</label>
+                        <input id="discount3">
+                    </div>
+                    <div class="field">
+                        <label for="aumento1">AUM 1</label>
+                        <input id="aumento1">
+                    </div>
+                    <div class="field">
+                        <label for="aumento2">AUM 2</label>
+                        <input id="aumento2">
+                    </div>
+                </div>
+
+                <!--  VERZO DISPO VEN - GIAC - ALL_INT - ALL_GLO - ORD_FOR - ORD_CLI -->
+                <div class="field-row cols-7-qta form-grid">
+                    <div class="field">
+                        <!-- SITO  -->
+                        <label for="vrz">SITO</label>
+                        <input id="vrz">
+                    </div>
+                    <div class="field">
+                        <!-- dispo = STOCK.QTYSTUACT - SUM(STOALL.QTYSTUACT) -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="dispVrz">DISPO_VEN</label>
+                        <input id="dispVrz">
+                    </div>
+                    <div class="field">
+                        <!-- GIACENZA = STOCK.QTYSTUACT -->
+                        <label for="giacVrz">GIAC</label>
+                        <input id="giacVrz">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allIntVrz">ALL_INT</label>
+                        <input id="allIntVrz">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allGloVrz">ALL_GLO</label>
+                        <input id="allGloVrz">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordForVrz">ORD_FOR</label>
+                        <input id="ordForVrz">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordCliVrz">ORD_CLI</label>
+                        <input id="ordCliVrz">
+                    </div>
+                </div>
+                <!--  AMATI DISPO VEN - GIAC - ALL_INT - ALL_GLO - ORD_FOR - ORD_CLI -->
+                <div class="field-row cols-7-qta form-grid">
+                    <div class="field">
+                        <!-- SITO  -->
+                        <label for="amati">SITO</label>
+                        <input id="amati">
+                    </div>
+                    <div class="field">
+                        <!-- dispo = STOCK.QTYSTUACT - SUM(STOALL.QTYSTUACT) -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="dispAma">DISPO_VEN</label>
+                        <input id="dispAma">
+                    </div>
+                    <div class="field">
+                        <!-- GIACENZA = STOCK.QTYSTUACT -->
+                        <label for="giacAma">GIAC</label>
+                        <input id="giacAma">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allIntAma">ALL_INT</label>
+                        <input id="allIntAma">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allGloAma">ALL_GLO</label>
+                        <input id="allGloAma">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordForAma">ORD_FOR</label>
+                        <input id="ordForAma">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordCliAma">ORD_CLI</label>
+                        <input id="ordCliAma">
+                    </div>
+                </div>
+                <!--  ORLA COMO DISPO VEN - GIAC - ALL_INT - ALL_GLO - ORD_FOR - ORD_CLI -->
+                <div class="field-row cols-7-qta form-grid">
+                    <div class="field">
+                        <!-- SITO  -->
+                        <label for="como">SITO</label>
+                        <input id="como">
+                    </div>
+                    <div class="field">
+                        <!-- dispo = STOCK.QTYSTUACT - SUM(STOALL.QTYSTUACT) -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="dispCo">DISPO_VEN</label>
+                        <input id="dispCo">
+                    </div>
+                    <div class="field">
+                        <!-- GIACENZA = STOCK.QTYSTUACT -->
+                        <label for="giacCo">GIAC</label>
+                        <input id="giacCo">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allIntCo">ALL_INT</label>
+                        <input id="allIntCo">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allGloCo">ALL_GLO</label>
+                        <input id="allGloCo">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordForCo">ORD_FOR</label>
+                        <input id="ordForCo">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordCliCo">ORD_CLI</label>
+                        <input id="ordCliCo">
+                    </div>
+                </div>
+                <!--  ORLA CIVATE DISPO VEN - GIAC - ALL_INT - ALL_GLO - ORD_FOR - ORD_CLI -->
+                <div class="field-row cols-7-qta form-grid">
+                    <div class="field">
+                        <!-- SITO  -->
+                        <label for="civate">SITO</label>
+                        <input id="civate">
+                    </div>
+                    <div class="field">
+                        <!-- dispo = STOCK.QTYSTUACT - SUM(STOALL.QTYSTUACT) -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="dispCv">DISPO_VEN</label>
+                        <input id="dispCv">
+                    </div>
+                    <div class="field">
+                        <!-- GIACENZA = STOCK.QTYSTUACT -->
+                        <label for="giacCv">GIAC</label>
+                        <input id="giacCv">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allIntCv">ALL_INT</label>
+                        <input id="allIntCv">
+                    </div>
+                    <div class="field">
+                        <!-- ALLOCATA = STOCK.CUMALLQTA -->
+                        <!-- BISOGNA TENER CONTO DELLA DIFFERENZA TRA Allocato interno 'A' e Allocato globale-->
+                        <label for="allGloCv">ALL_GLO</label>
+                        <input id="allGloCv">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordForCv">ORD_FOR</label>
+                        <input id="ordForCv">
+                    </div>
+                    <div class="field">
+                        <!-- ORDINATA FOR = PORDITM.QTYUOM -->
+                        <label for="ordCliCv">ORD_CLI</label>
+                        <input id="ordCliCv">
+                    </div>
+                </div>
+
+                
+
+            </div>
+            <!-- CUSTOMER EMAIL -->
+            <div class="field">
+                <label for="replyAddress">CUSTOMER E-MAIL ADDRESS</label>
+                <input id="replyAddress" placeholder="REPLY ADDRESS">
+            </div>
+            <h4>Reply</h4>
+            <textarea id="replyBox"></textarea>
+            <button class="success" onclick="sendReply()">Send</button>
+
+        </div>
+
+    </div>
+
+    <script src="static/app.js"></script>
+</body>
+</html>
+
