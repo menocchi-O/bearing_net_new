@@ -3,7 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\PcAsusF515e\\py_git\\bearing_net_new\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PcAsusF515e\\py_git\\extrapolatingData_pst_upg.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PcAsusF515e\\py_git\\bearing_net_new\\main.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:main.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -13,7 +14,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -24,16 +25,20 @@
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "extrapolatingData_pst_upg.py",
-              "DocumentMoniker": "C:\\Users\\PcAsusF515e\\py_git\\extrapolatingData_pst_upg.py",
-              "RelativeDocumentMoniker": "..\\extrapolatingData_pst_upg.py",
-              "ToolTip": "C:\\Users\\PcAsusF515e\\py_git\\extrapolatingData_pst_upg.py",
-              "RelativeToolTip": "..\\extrapolatingData_pst_upg.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAP8AAAAAAAAAAAAAAA==",
+              "Title": "main.py",
+              "DocumentMoniker": "C:\\Users\\PcAsusF515e\\py_git\\bearing_net_new\\main.py",
+              "RelativeDocumentMoniker": "main.py",
+              "ToolTip": "C:\\Users\\PcAsusF515e\\py_git\\bearing_net_new\\main.py",
+              "RelativeToolTip": "main.py",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2026-06-23T14:56:07.503Z",
+              "WhenOpened": "2026-07-27T15:06:23.262Z",
               "EditorCaption": ""
             }
           ]
