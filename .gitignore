@@ -33,6 +33,7 @@ appsettings.json
 # IDE / editor settings
 .vscode/
 .idea/
+.vs
 
 # OS files
 .DS_Store
