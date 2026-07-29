@@ -1,0 +1,176 @@
+ID,ConversationID,InquiryFrom,InquirySubject,InquiryBody,InquiryDate,Processed,Status
+1,A,RIVENDITORE_1,RICHIESTA OFFERTA,"Buongiorno,
+
+avrei bisogno vs miglior offerta per
+
+ 
+
+1
+
+CUSCINETTO A SFERE 6011 (55*90*18)
+
+1
+
+CUSCINETTO 6012 (60*95*18)
+
+ 
+
+ 
+
+In attesa",05/07/2026,,
+2,B,CLIENTE_1,RICHIESTA QUOTAZIONE,"Buongiorno,
+La presente per chiedere offerta per:
+
+Pz 200 BOCCOLA BRONZO SINT.CILIND:BR 22X28X30
+
+Resto in attesa di un Vostro gentile riscontro
+
+Grazie",05/07/2026,,
+3,C,MANUTENTORE_1,INQUIRY,"Buongiorno
+ 
+Mi dareste il costo aggiornato.
+ 
+N° 4pz. CUSC. ORIENTABILE A RULLI 22214",03/07/2026,,
+4,D,CLIENTE_2,OFFERTA,"Buongiorno, ci necessita cortesemente entro questa mattina vs. migliore offerta e verifica tempi di consegna/disponibilità per:
+ 
+n.2   Sopporti SKF SNL 507
+n.2   Coppie tenute SKF TSN 507 L (TXL507)
+n.2   Cuscinetto SKF 2207K
+n.2   Bussola SKF H307
+n.2   Anelli arresto SKF FRB 5.5/72",05/07/2026,,
+5,E,RIVENDITORE_2,INQUIRY REQUEST,"Inquiry no QTY26-016-2289PO
+ 
+No.
+Designation
+Brand
+Description
+Quantity
+Unit
+Comment
+1.
+365/363D
+TIMKEN
+Double row tapered roller bearing
+2
+pcs",27/07/2026,,
+6,F,MANUTENTORE_2,RICHIESTA QUOTAZIONE,"Buongiorno,
+mi servirebbe sapere costi e disponibilità per il seguente materiale , nel dettaglio :
+ 
+I.ME.TO.MAGR.0002.05 Mole a Disco Grigie - 7000G 150 20M- SCU            N.2
+                                                   Alternativa a nostra Mola Widia D150X20X16 9/80K
+ 
+I.ME.TR.BEFL.0001.05 Supporto a Flangia 3 Fori UCFB 204 D.20 (Ghisa)    N.6
+ 
+In attesa vostro riscontro
+Cordiali Saluti",12/07/2026,,
+7,G,CLIENTE_5,RICHIESTA OFFERTA,"Buonasera, avrei bisogno di acquistare 4 elettrovalvole come quella nell'immagine allegata.
+Riuscite a quotarcele?
+Ringrazio anticipatamente e saluto",05/07/2026,,
+8,H,RIVENDITORE_8,RICHIESTA DI OFFERTA,"Buongiorno,
+ 
+per cortesia, fornire vostro migliore offerta per quanto riportato di seguito:
+ 
+OR
+Secondo Cod. art.
+Descrizione Riga
+Descrizione Riga 2
+Nome del produttore
+Numero di articolo del produttore
+Q.tà
+11465106
+15081645
+W75UD30 10 P100 B5/B3
+RIDUTTORE I=10 VER ALB.LENTO C
+Bonfiglioli
+W75UD30 10 P100 B5/B3
+1
+ 
+Si raccomanda di procedere alla consegna solo dopo averci inviato la vostra offerta formale ed aver ricevuto il relativo ordine OP, da riportare in bolla.
+ 
+Resto a disposizione per qualsiasi chiarimento o delucidazione in merito alle specifiche tecniche dei materiali richiesti.
+ 
+Vi prego di rispondere facendo riferimento alla presente e-mail per facilitare la gestione degli ordini.
+ 
+Grazie per la collaborazione.
+Cordiali Saluti - Best Regards",05/07/2026,,
+9,I,RIVENDITORE_3,OFFERTA FORNITORE,"Buongiorno,
+
+con la presente siamo a chiedere Vostre migliori condizioni per l’eventuale fornitura di:
+
+ 
+
+Codice Ricambio
+
+Descrizione
+
+Quantita'
+
+Manufacturer
+
+Manufacturer Part Number
+
+SP1050250
+
+BUSSOLA DI TRAZIONE H 313
+
+1.0
+
+SKF
+
+SP1050252
+
+GUARNIZIONE TSN 513C
+
+2.0
+
+SKF
+
+SP1050232
+
+CUSCINETTO CON SUPPORTO FORMA OMEGA SY 45 TF
+
+10.0
+
+SKF
+
+SY 45 TF
+
+SP1050221
+
+CUSCINETTO CON SUPPORTO FORMA QUADRATA FY 50 TF
+
+4.0
+
+SKF
+
+FY 50 TF
+
+SP1050251
+
+CUSCINETTO 32215J
+
+4.0
+
+SKF
+
+SP1050253
+
+SUPPORTO SNL 513-611
+
+2.0
+
+SKF
+
+ 
+
+ 
+
+Cordiali Saluti",15/05/2026,,
+10,L,CLIENTE_3,RICHIESTA DI OFFERTA,"Buongiorno,
+mi servirebbe offerta e tempi di consegna per cuscinetto sotto indicato
+ 
+ 
+ 
+NATV25-PP-A  INA/ELGES CUSCINETTO    N. 8 ST
+ 
+Cordiali Saluti",08/06/2026,,

@@ -62,7 +62,11 @@ async function proceedToWeb() {
             .replace(/```/g, "")
             .trim();
         const data = JSON.parse(clean);
+        
         const item = data.items?.[0] || {};
+
+        console.log("Retrieved from AI: " + data.items?.[0]);
+
         document.getElementById("articolo").value = item.item_code || "";
         document.getElementById("marca").value = item.brand || "";
         document.getElementById("qta").value = item.quantity || "";
