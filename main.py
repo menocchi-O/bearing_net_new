@@ -44,6 +44,7 @@ with open("appsettings.json", "r") as f:
     config = json.load(f)
 
 CSV_FILE = config["CSV_FILE"]
+CSV_FILE_DEMO = config["CSV_FILE_DEMO"]
 CSV_ITEMS = config["CSV_ITEMS"]
 DB_PASSWORD = config["DB_PASSWORD"]
 EMAIL_PASSWORD = config["EMAIL_PASSWORD"]
@@ -695,14 +696,14 @@ def get_sender_tokens(sender):
 
     return tokens
 def get_next_email():
-    with open(CSV_FILE, newline='', encoding="utf-8") as f:
+    with open(CSV_FILE_DEMO, newline='') as f:
         reader = list(csv.DictReader(f, delimiter=','))
     for row in reader:
         if row["Processed"] == "":
             return row
     return None
 def mark_as_processed(email_id, email_body):
-    with open(CSV_FILE, newline='', encoding="utf-8") as f:
+    with open(CSV_FILE_DEMO, newline='') as f:
         rows = list(csv.DictReader(f, delimiter=','))
 
     for row in rows:
@@ -712,7 +713,7 @@ def mark_as_processed(email_id, email_body):
                 row["Status"] = "skipped"
             else:
                 row["Status"] = "saved"
-    with open(CSV_FILE, "w", newline='', encoding="utf-8") as f:
+    with open(CSV_FILE_DEMO, "w", newline='') as f:
         writer = csv.DictWriter(f, fieldnames=rows[0].keys())
         writer.writeheader()
         writer.writerows(rows)
