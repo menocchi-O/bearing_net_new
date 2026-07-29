@@ -54,23 +54,45 @@ async function proceedToWeb() {
         })
     })
     const data = await res.json();
+    const clean = data.llm_response
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+    console.log(clean);
 
-    const row = data.llm_response;
     try {
-        const clean = row
-            .replace(/```json/g, "")
-            .replace(/```/g, "")
-            .trim();
-        const data = JSON.parse(clean);
         
-        const item = data.items?.[0] || {};
+        const data = JSON.parse(clean);
 
-        console.log("Retrieved from AI: " + data.items?.[0]);
 
-        document.getElementById("articolo").value = item.item_code || "";
-        document.getElementById("marca").value = item.brand || "";
-        document.getElementById("qta").value = item.quantity || "";
-        document.getElementById("note").value = item.description || "";
+        const tbody = document.querySelector("#linesTable tbody");
+
+        // clear previous rows
+        tbody.innerHTML = "";
+
+        // populate candidates
+        data.items.forEach((item, index) => {
+            const row = document.createElement("tr");
+
+            console.log(`Desc: ${item.description}`)
+
+            row.innerHTML = `
+            <td>${item.item_code}</td>
+            <td>${item.description}</td>
+        `;
+            tbody.appendChild(row);
+        });
+
+
+
+        //const item = data.items?.[0] || {};
+
+        //console.log("Retrieved from AI: " + data.items?.[0]);
+
+        //document.getElementById("articolo").value = item.item_code || "";
+        //document.getElementById("marca").value = item.brand || "";
+        //document.getElementById("qta").value = item.quantity || "";
+        //document.getElementById("note").value = item.description || "";
     } catch (err) {
         console.error("Invalid JSON:", err);
         alert("The LLM Response field does not contain valid JSON.");
