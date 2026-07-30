@@ -79,7 +79,30 @@ async function proceedToWeb() {
             row.innerHTML = `
             <td>${item.item_code}</td>
             <td>${item.description}</td>
+            <td>
+                <input
+                    type="radio"
+                    name="itemSelect"
+                    value="${item.item_code}"
+                >
+            </td>
         `;
+            const itemsByCode = new Map();
+
+            data.items.forEach(item => {
+                itemsByCode.set(item.item_code, item);
+            });
+
+            tbody.addEventListener("change", (event) => {
+                const item = itemsByCode.get(event.target.value);
+
+                if (item) {
+                    console.log("Selected:", item.item_code);
+                    console.log("Description:", item.description);
+                    console.log("Checked:", event.target.checked);
+                }
+            })
+
             tbody.appendChild(row);
         });
 
