@@ -1,4 +1,5 @@
-﻿async function clean() {
+﻿const itemsByCode = new Map();
+async function clean() {
     const text = document.getElementById("emailInput").value;
     document.getElementById("cleanedText").value = ""; // placeholder
 
@@ -87,39 +88,43 @@ async function proceedToWeb() {
                 >
             </td>
         `;
-            const itemsByCode = new Map();
+            
 
             data.items.forEach(item => {
                 itemsByCode.set(item.item_code, item);
             });
 
-            tbody.addEventListener("change", (event) => {
-                const item = itemsByCode.get(event.target.value);
-
-                if (item) {
-                    console.log("Selected:", item.item_code);
-                    console.log("Description:", item.description);
-                    console.log("Checked:", event.target.checked);
-                }
-            })
+            
 
             tbody.appendChild(row);
         });
 
+        tbody.addEventListener("change", (event) => {
+            const item = itemsByCode.get(event.target.value);
 
+            if (item) {
 
-        //const item = data.items?.[0] || {};
+                loadLineItem(item);
+                console.log("Selected:", item.item_code);
+                console.log("Description:", item.description);
+                console.log("Checked:", event.target.checked);
+            }
+        })
 
-        //console.log("Retrieved from AI: " + data.items?.[0]);
-
-        //document.getElementById("articolo").value = item.item_code || "";
-        //document.getElementById("marca").value = item.brand || "";
-        //document.getElementById("qta").value = item.quantity || "";
-        //document.getElementById("note").value = item.description || "";
+        
     } catch (err) {
         console.error("Invalid JSON:", err);
         alert("The LLM Response field does not contain valid JSON.");
     }
+
+}
+
+async function loadLineItem(item) {
+
+    document.getElementById("articolo").value = item.item_code || "";
+    document.getElementById("marca").value = item.brand || "";
+    document.getElementById("qta").value = item.quantity || "";
+    document.getElementById("note").value = item.description || "";
 
 }
 
