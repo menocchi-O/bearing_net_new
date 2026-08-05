@@ -29,6 +29,8 @@ import unicodedata
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session
 from urllib.parse import quote_plus
+import psycopg
+from psycopg.rows import dict_row
 ### AI REQUEST ###
 from openai import OpenAI
 ### SEND REPLY ###
@@ -62,6 +64,8 @@ engine = create_engine(
     DATABASE_URL,
     connect_args = {"sslmode": "require"}
     )
+### CATALOG CONNECTION ###
+catalog_db = (f"postgresql://postgres.qnxsiaxmcexhzdvaobqy:{encode_pwd}@aws-0-eu-west-1.pooler.supabase.com:5432/postgres")
 ### ODBC CONNECTION ###
 odbc_pwd = quote_plus(PWD_ODBC)
 conn_odbc = pyodbc.connect(
@@ -295,9 +299,40 @@ async def skip_email(req: ProcessRequest):
 
 ### FIND INNER CODE ###
 @app.get("/search_code")
-def search_item(q: str, request: Request):
-    session = request.app.state.session
-    return process_manual(q, session);
+def search_item(q: str):
+    with psycopg.connect(catalog_db) as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+
+            cur.execute(
+                """
+                SELECT
+                    id_interno,
+                    codice,
+                    descrizione_estesa,
+                    similarity(codice, %s) AS score
+                FROM products_new
+                WHERE codice %% %s
+                ORDER BY score DESC
+                LIMIT 10
+                """,
+                (q, q)
+            )
+
+            rows = cur.fetchall()
+            print("RETURNED ROWS: ")
+            print(rows)
+            scored = [
+                {
+                    "status": "review",
+                    "candidate": row["codice"],
+                    "inner_code": row["id_interno"],
+                    "required_code": row["codice"],   # or another field if you have one
+                    "description": row["descrizione_estesa"],
+                    "score": row["score"],
+                }
+            for row in rows
+            ]
+    return scored;
 
 ### FIND ERP DETAILS ###
 @app.get("/get_details")

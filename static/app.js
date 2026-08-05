@@ -143,7 +143,7 @@ async function searchCode() {
     console.log("Search inner code:");
     console.log(data)
 
-    if (data.status !== "review") {
+    if (data.status == "") {
         alert("No candidates found");
         return
     }
@@ -156,7 +156,7 @@ async function searchCode() {
     tbody.innerHTML = "";
 
     // populate candidates
-    data.candidates.forEach((candidate, index) => {
+    data.forEach((candidate, index) => {
         const row = document.createElement("tr");
 
         console.log(`Desc: ${candidate.description}`)
