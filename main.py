@@ -121,28 +121,47 @@ def web_search(req: ProcessRequest):
     }
 def build_prompt(email_text: str) -> str:
     return f"""
-    Extract all line items from the email.
+    You are a product information extraction assistant.
 
-    Return ONLY valid JSON in this format:
+    Your task is to analyze a customer email and extract all requested products.
+
+    Return ONLY valid JSON with this structure:
+
     {{
         "items": [
-            {{
-                "item_code": "",
-                "brand": "",
-                "quantity": "",
-                "description": "",
-                "notes": ""
-            }}
-        ]
+        {{
+            "item_code": "",
+            "brand": "",
+            "quantity": "",
+            "description": "",
+            "description_source": "email",
+            "notes": ""
+        }}
+    ]
     }}
 
     Rules:
-    - Split items by lines starting with *, NR., numbers,bullets, ';', or new line with similar format.
-    - item_code is any alphanumeric product identifier (e.g. SKF 22316E, UNI 6604-A).
-    - If multiple codes exist, prefer manufacturer codes first.
-    - If a field is missing, leave it as "".
-    - Treat notes as an additional field in which, if possible, you can give some context on the requested item.
-    - Do not hallucinate values.
+
+    - Extract the product code only if it is explicitly present in the email.
+    - Never invent or guess product codes.
+    - Extract the brand only if explicitly mentioned.
+    - Extract quantity only if explicitly mentioned.
+    - The description field must contain a concise technical description of the requested product.
+
+    Important fallback rule:
+    - If you cannot identify either a product code OR a meaningful product description, put the complete email body in the "description" field.
+    - Do not summarize or modify the email in this fallback case.
+    - Preserve the original text so that another process can optimize it later.
+
+    Ignore:
+    - greetings,
+    - signatures,
+    - delivery addresses,
+    - prices,
+    - commercial discussions,
+    unless they contain information useful for identifying the product.
+
+    If multiple products are requested, return multiple objects in the items array.
 
     Email:
     \"\"\"{email_text}\"\"\"
@@ -155,6 +174,66 @@ def call_llm(prompt: str):
     )
     return response.choices[0].message.content
 
+### AI REQUEST EXTRACT DESCRIPTION ###
+@app.post("/extractDescription")
+def extractDescription(req: ProcessRequest):
+    prompt = reduceDescription(req.email)
+    llm_output = call_llm(prompt)
+    print(llm_output)
+    return {
+        "id": req.id,
+        "prompt": prompt,
+        "llm_response": llm_output
+    }
+def reduceDescription(email_text: str):
+    return f"""
+        You are a product search query optimizer.
+
+        Your task is to transform customer emails into concise technical search descriptions that will be used to find matching products in a catalog.
+
+        Extract and keep only information useful for identifying the requested product:
+        - product type
+        - technical characteristics
+        - dimensions
+        - materials
+        - standards
+        - brands or manufacturers
+        - application context if it helps identify the product
+
+        Remove:
+        - greetings and polite expressions
+        - customer names
+        - delivery information
+        - prices
+        - urgency requests
+        - commercial discussions
+        - unrelated context
+
+        Do not invent information.
+        Do not guess product codes.
+        Do not identify the exact product.
+        Do not add specifications that are not present in the email.
+
+        If the email does not contain enough information to describe a product, return an empty string.
+
+        Return ONLY valid JSON matching this schema:
+
+    {{
+        "items": [
+        {{
+            "item_code": "",
+            "brand": "",
+            "quantity": "",
+            "description": "",
+            "description-source": "full text",
+            "notes": ""
+        }}
+    ]
+    }}
+        
+        Email:
+        \"\"\"{email_text}\"\"\"
+    """
 ### DATA EXTRACTION FROM EMAIL TEXT ###
 @app.post("/extract")
 def email_parser(req: ProcessRequest):

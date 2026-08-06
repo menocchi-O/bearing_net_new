@@ -1,4 +1,18 @@
 ﻿const itemsByCode = new Map();
+
+const tbody = document.querySelector("#linesTable tbody");
+tbody.addEventListener("change", (event) => {
+
+    const item = itemsByCode.get(event.target.value);
+
+    if (item) {
+
+        loadLineItem(item);
+        console.log("Selected:", item.item_code);
+        console.log("Description:", item.description);
+        console.log("Checked:", event.target.checked);
+    }
+})
 async function clean() {
     const text = document.getElementById("emailInput").value;
     document.getElementById("cleanedText").value = ""; // placeholder
@@ -54,8 +68,8 @@ async function proceedToWeb() {
             email: text
         })
     })
-    const data = await res.json();
-    const clean = data.llm_response
+    const dataResponse = await res.json();
+    const clean = dataResponse.llm_response
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
@@ -64,53 +78,42 @@ async function proceedToWeb() {
     try {
         
         const data = JSON.parse(clean);
+        const extractedItems = data.items;
+        let searchItems = [...extractedItems];
 
-
-        const tbody = document.querySelector("#linesTable tbody");
+        console.log(extractedItems)
+        console.log(searchItems.length)
+        console.log(searchItems[0].item_code)
+        console.log(searchItems[0].description_source)
+        if (searchItems.length === 1 && !searchItems[0].item_code && searchItems[0].description_source == "email") {
+            searchItems = await extractDescription(text)
+        }
 
         // clear previous rows
         tbody.innerHTML = "";
 
         // populate candidates
-        data.items.forEach((item, index) => {
+        searchItems.forEach((item, index) => {
             const row = document.createElement("tr");
-
+            const key = item.item_code || `item-${index}`;
             console.log(`Desc: ${item.description}`)
 
+            
+
             row.innerHTML = `
-            <td>${item.item_code}</td>
+            <td>${item.item_code || "-"}</td>
             <td>${item.description}</td>
             <td>
                 <input
                     type="radio"
                     name="itemSelect"
-                    value="${item.item_code}"
+                    value="${key}"
                 >
             </td>
         `;
-            
-
-            data.items.forEach(item => {
-                itemsByCode.set(item.item_code, item);
-            });
-
-            
-
+            itemsByCode.set(key, item);
             tbody.appendChild(row);
         });
-
-        tbody.addEventListener("change", (event) => {
-            const item = itemsByCode.get(event.target.value);
-
-            if (item) {
-
-                loadLineItem(item);
-                console.log("Selected:", item.item_code);
-                console.log("Description:", item.description);
-                console.log("Checked:", event.target.checked);
-            }
-        })
-
         
     } catch (err) {
         console.error("Invalid JSON:", err);
@@ -356,6 +359,34 @@ function closeReviewModal() {
 }
 function closeDetailPanel() {
     document.getElementById("detailPanel").classList.add("hidden");
+}
+async function extractDescription(text) {
+    const res = await fetch("/extractDescription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            id: window.currentID,
+            email: text
+        })
+    })
+    const data = await res.json();
+    console.log(data);
+    const clean = data.llm_response
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+    console.log(clean);
+    try {
+
+        const data = JSON.parse(clean);
+        return data.items;
+
+    }
+    catch {
+        console.error("Invalid JSON:", err);
+        alert("The LLM Response field does not contain valid JSON.");
+        return null;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
