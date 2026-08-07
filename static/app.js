@@ -133,20 +133,36 @@ async function loadLineItem(item) {
 
 async function searchCode() {
     item_code = document.getElementById("articolo").value;
+    let res;
 
-    const res = await fetch(
-        `/search_code?q=${encodeURIComponent(item_code)}`,
-        {
-            method: "GET"
-        }
-    );
+    if (item_code) {
+        res = await fetch(
+            `/search_code?q=${encodeURIComponent(item_code)}`,
+            {
+                method: "GET"
+            }
+        );
+
+    } else {
+            description = document.getElementById("note").value;
+            res = await fetch("/find_embeddings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id: window.currentID,
+                    description: description
+                })
+            }
+        )
+    }
+    console.log(res.status);
 
     const data = await res.json();
     // devo ricevere i candidati a questo punto
     console.log("Search inner code:");
     console.log(data)
 
-    if (data.status == "") {
+    if (data.length === 0) {
         alert("No candidates found");
         return
     }

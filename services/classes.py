@@ -19,6 +19,9 @@ class ProcessedRequest(BaseModel):
 class InnerCodeRequest(BaseModel):
     id: int
     articolo: str
+class EmbeddingRequest(BaseModel):
+    id: int
+    description: str
 class SaveRequest(BaseModel):
     id:int
     original_email: str

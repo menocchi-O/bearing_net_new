@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 ### FLOW VARIABLES ###
 from services.matching_services import process_manual
 import json
-from services.classes import ProcessRequest, ProcessedRequest, SaveRequest, InnerCodeRequest, MatchingSession
+from services.classes import ProcessRequest, ProcessedRequest, SaveRequest, InnerCodeRequest, MatchingSession, EmbeddingRequest
 import spacy
 import json
 import re
@@ -413,6 +413,59 @@ def search_item(q: str):
             ]
     return scored;
 
+### FIND EMBEDDINGS ###
+@app.post("/find_embeddings")
+def find_embeddings(req: EmbeddingRequest):
+
+    print("SEARCH TEXT:")
+    print(repr(req.description))
+
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=req.description
+    )
+
+    embedding = response.data[0].embedding
+
+    with psycopg.connect(catalog_db) as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+
+            cur.execute(
+                """
+                SELECT
+                    id_interno,
+                    codice,
+                    descrizione_estesa,
+                    1 - (embedding <=> %s::vector) AS score
+                FROM products_new
+                ORDER BY embedding <=> %s::vector
+                LIMIT 10
+                """,
+                (embedding, embedding)
+            )
+
+            rows = [
+                r for r in cur.fetchall()
+            ]
+
+            for r in rows:
+                print(
+                    r["codice"],
+                    r["descrizione_estesa"],
+                    r["score"]
+                )
+
+    return [
+        {
+            "status": "review",
+            "candidate": row["codice"],
+            "inner_code": row["id_interno"],
+            "required_code": row["codice"],
+            "description": row["descrizione_estesa"],
+            "score": row["score"],
+        }
+        for row in rows
+    ]
 ### FIND ERP DETAILS ###
 @app.get("/get_details")
 def get_details(codmat: str):
