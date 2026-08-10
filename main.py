@@ -1,5 +1,6 @@
 # This is supposed to be a change applying only to demo_BearingNet branch
 from plistlib import UID
+from sys import deactivate_stack_trampoline
 
 from pydantic_core.core_schema import DateSchema
 from fastapi.staticfiles import StaticFiles
@@ -66,6 +67,7 @@ engine = create_engine(
     )
 ### CATALOG CONNECTION ###
 catalog_db = (f"postgresql://postgres.qnxsiaxmcexhzdvaobqy:{encode_pwd}@aws-0-eu-west-1.pooler.supabase.com:5432/postgres")
+conn = psycopg.connect(catalog_db)
 ### ODBC CONNECTION ###
 odbc_pwd = quote_plus(PWD_ODBC)
 conn_odbc = pyodbc.connect(
@@ -179,7 +181,6 @@ def call_llm(prompt: str):
 def extractDescription(req: ProcessRequest):
     prompt = reduceDescription(req.email)
     llm_output = call_llm(prompt)
-    print(llm_output)
     return {
         "id": req.id,
         "prompt": prompt,
@@ -379,8 +380,7 @@ async def skip_email(req: ProcessRequest):
 ### FIND INNER CODE ###
 @app.get("/search_code")
 def search_item(q: str):
-    with psycopg.connect(catalog_db) as conn:
-        with conn.cursor(row_factory=dict_row) as cur:
+    with conn.cursor(row_factory=dict_row) as cur:
 
             cur.execute(
                 """
@@ -398,8 +398,6 @@ def search_item(q: str):
             )
 
             rows = cur.fetchall()
-            print("RETURNED ROWS: ")
-            print(rows)
             scored = [
                 {
                     "status": "review",
@@ -416,9 +414,6 @@ def search_item(q: str):
 ### FIND EMBEDDINGS ###
 @app.post("/find_embeddings")
 def find_embeddings(req: EmbeddingRequest):
-
-    print("SEARCH TEXT:")
-    print(repr(req.description))
 
     response = client.embeddings.create(
         model="text-embedding-3-small",
@@ -448,12 +443,6 @@ def find_embeddings(req: EmbeddingRequest):
                 r for r in cur.fetchall()
             ]
 
-            for r in rows:
-                print(
-                    r["codice"],
-                    r["descrizione_estesa"],
-                    r["score"]
-                )
 
     return [
         {
@@ -770,6 +759,93 @@ def get_details(codmat: str):
         "desc3": desc3,
         "grpscoven": grpscoven
     }
+@app.get("/get_details_demo")
+def get_details_demo(innerCode: str):
+    with conn.cursor(row_factory=dict_row) as cur:
+        sito = cur.execute(
+            """
+            SELECT sito
+            FROM DW_CATALOG_USE
+            WHERE id_interno = innerCode
+            """
+        )
+
+
+    return  {
+                f"ordFor{sito}" : f"""
+                    SELECT ord_for
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"qtaDispo{sito}" : f"""
+                    SELECT dispo_ven
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"giac{sito}" : f"""
+                    SELECT giac
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"allInt{sito}" : f"""
+                    SELECT all_int
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"allGlo{sito}" : f"""
+                    SELECT all_glo
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"ordCli{sito}" : f"""
+                    SELECT ord_cli
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"pzoLordo{sito}" : f"""
+                    SELECT lordo
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"pzoNetto{sito}" : f"""
+                    SELECT netto
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"SCO1" : f"""
+                    SELECT sco1
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"SCO2" : f"""
+                    SELECT sco2
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"SCO3" : f"""
+                    SELECT sco3
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"AUM1" : f"""
+                    SELECT aum1
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"AUM2" : f"""
+                    SELECT aum2
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                f"desc" : f"""
+                    SELECT descrizione_breve
+                    FROM DW_CATALOG_USE
+                    WHERE id_interno={innerCode} AND sito={sito}
+                """,
+                "grpscoven": ""
+
+        }       
+    
 
 ### SEND REPLY ###
 def send_reply(record):

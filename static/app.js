@@ -6,11 +6,7 @@ tbody.addEventListener("change", (event) => {
     const item = itemsByCode.get(event.target.value);
 
     if (item) {
-
         loadLineItem(item);
-        console.log("Selected:", item.item_code);
-        console.log("Description:", item.description);
-        console.log("Checked:", event.target.checked);
     }
 })
 async function clean() {
@@ -31,7 +27,6 @@ async function clean() {
 }
 
 async function extract() {
-    console.log("Extract data");
     const text = document.getElementById("emailInput").value;
 
     const res = await fetch("/extract", {
@@ -43,8 +38,7 @@ async function extract() {
         })
     });
     const data = await res.json();
-    console.log(data);
-
+    
     document.getElementById("azienda").value = data.azienda || "";
     document.getElementById("paese").value = data.paese || "";
     document.getElementById("email").value = data.email || "";
@@ -73,18 +67,13 @@ async function proceedToWeb() {
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
-    console.log(clean);
-
+    
     try {
         
         const data = JSON.parse(clean);
         const extractedItems = data.items;
         let searchItems = [...extractedItems];
 
-        console.log(extractedItems)
-        console.log(searchItems.length)
-        console.log(searchItems[0].item_code)
-        console.log(searchItems[0].description_source)
         if (searchItems.length === 1 && !searchItems[0].item_code && searchItems[0].description_source == "email") {
             searchItems = await extractDescription(text)
         }
@@ -96,10 +85,7 @@ async function proceedToWeb() {
         searchItems.forEach((item, index) => {
             const row = document.createElement("tr");
             const key = item.item_code || `item-${index}`;
-            console.log(`Desc: ${item.description}`)
-
             
-
             row.innerHTML = `
             <td>${item.item_code || "-"}</td>
             <td>${item.description}</td>
@@ -155,12 +141,9 @@ async function searchCode() {
             }
         )
     }
-    console.log(res.status);
-
+    
     const data = await res.json();
     // devo ricevere i candidati a questo punto
-    console.log("Search inner code:");
-    console.log(data)
 
     if (data.length === 0) {
         alert("No candidates found");
@@ -177,8 +160,6 @@ async function searchCode() {
     // populate candidates
     data.forEach((candidate, index) => {
         const row = document.createElement("tr");
-
-        console.log(`Desc: ${candidate.description}`)
 
         row.innerHTML = `
             <td>${candidate.required_code}</td>
@@ -202,8 +183,7 @@ async function searchCode() {
 }
 
 async function loadNext() {
-    // console.log("LOADNEXT START");
-
+    
     if (!document.getElementById("detailPanel").classList.contains("hidden")) {
         document.getElementById("detailPanel").classList.add("hidden")
     }
@@ -225,12 +205,8 @@ async function loadNext() {
     const res = await fetch("/next");
     const data = await res.json();
 
-    // console.log("LOADNEXT DATA:", data);
-
     if (data.status === "done") {
-        console.log("NO MORE EMAILS");
         document.getElementById("emailInput").value = "";
-        // document.getElementById("output").value = "";
         alert("All emails processed!")
         return;
     }
@@ -250,57 +226,54 @@ async function skip() {
             email: "skip"
         })
     });
-    console.log("CALLING loadNext AFTER SKIP");
     loadNext();
 }
 
 async function openDetailPanel(innerCode) {
-    console.log(`Showing side-panel: ${innerCode}`);
     document.getElementById("innerCode").value = innerCode
     document.getElementById("replyAddress").value = document.getElementById("email").value
-    document.getElementById("vrz").value = "VERZOLLA"
-    document.getElementById("amati").value = "AMATI"
-    document.getElementById("como").value = "COMO"
-    document.getElementById("civate").value = "CIVATE"
+    document.getElementById("1").value = "SITO 1"
+    document.getElementById("2").value = "SITO 2"
+    document.getElementById("3").value = "SITO 3"
+    document.getElementById("4").value = "SITO 4"
 
 
-    const res = await fetch(`/get_details?codmat=${encodeURIComponent(innerCode)}`,
+    const res = await fetch(`/get_details_demo?codmat=${encodeURIComponent(innerCode)}`,
         {
             method: "GET"
         });
 
     const data = await res.json();
-    console.log(data);
+    
+    document.getElementById("disp1").value = data.qtaDispo1
+    document.getElementById("disp2").value = data.qtaDispo2
+    document.getElementById("disp3").value = data.qtaDispo3
+    document.getElementById("disp4").value = data.qtaDispo4
 
-    document.getElementById("dispVrz").value = data.qtaDispoVrz
-    document.getElementById("dispAma").value = data.qtaDispoAma
-    document.getElementById("dispCo").value = data.qtaDispoCo
-    document.getElementById("dispCv").value = data.qtaDispoCv
+    document.getElementById("giac1").value = data.giac1
+    document.getElementById("giac2").value = data.giac2
+    document.getElementById("giac3").value = data.giac3
+    document.getElementById("giac4").value = data.giac4
 
-    document.getElementById("giacVrz").value = data.giacVrz
-    document.getElementById("giacAma").value = data.giacAma
-    document.getElementById("giacCo").value = data.giacCo
-    document.getElementById("giacCv").value = data.giacCv
+    document.getElementById("allInt1").value = data.allInt1
+    document.getElementById("allInt2").value = data.allInt2
+    document.getElementById("allInt3").value = data.allInt3
+    document.getElementById("allInt4").value = data.allInt4
 
-    document.getElementById("allIntVrz").value = data.allIntVrz
-    document.getElementById("allIntAma").value = data.allIntAma
-    document.getElementById("allIntCo").value = data.allIntCo
-    document.getElementById("allIntCv").value = data.allIntCv
+    document.getElementById("allGlo1").value = data.allGlo1
+    document.getElementById("allGlo2").value = data.allGlo2
+    document.getElementById("allGlo3").value = data.allGlo3
+    document.getElementById("allGlo4").value = data.allGlo4
 
-    document.getElementById("allGloVrz").value = data.allGloVrz
-    document.getElementById("allGloAma").value = data.allGloAma
-    document.getElementById("allGloCo").value = data.allGloCo
-    document.getElementById("allGloCv").value = data.allGloCv
+    document.getElementById("ordFor1").value = data.qtaOrdFor1
+    document.getElementById("ordFor2").value = data.qtaOrdFor2
+    document.getElementById("ordFor3").value = data.qtaOrdFor3
+    document.getElementById("ordFor4").value = data.qtaOrdFor4
 
-    document.getElementById("ordForVrz").value = data.qtaOrdForVrz
-    document.getElementById("ordForAma").value = data.qtaOrdForAma
-    document.getElementById("ordForCo").value = data.qtaOrdForCo
-    document.getElementById("ordForCv").value = data.qtaOrdForCv
-
-    document.getElementById("ordCliVrz").value = data.ordCliVrz
-    document.getElementById("ordCliAma").value = data.ordCliAma
-    document.getElementById("ordCliCo").value = data.ordCliCo
-    document.getElementById("ordCliCv").value = data.ordCliCv
+    document.getElementById("ordCli1").value = data.ordCli1
+    document.getElementById("ordCli2").value = data.ordCli2
+    document.getElementById("ordCli3").value = data.ordCli3
+    document.getElementById("ordCli4").value = data.ordCli4
 
     document.getElementById("discount1").value = data.SCO1
     document.getElementById("discount2").value = data.SCO2
@@ -309,7 +282,7 @@ async function openDetailPanel(innerCode) {
     document.getElementById("aumento2").value = data.AUM2
     document.getElementById("netPrice").value = data.pzoNetto
     document.getElementById("grossPrice").value = data.pzoLordo
-    document.getElementById("description").value = data.desc1 + " - " + data.desc2 + "   " + data.desc3
+    document.getElementById("description").value = data.desc
     document.getElementById("grpscoven").value = data.grpscoven
 
     document.getElementById("detailPanel").classList.remove("hidden");
@@ -344,7 +317,6 @@ async function sendReply() {
     })
 
     const data = await res.json();
-    console.log("SERVER RESPONSE: ", data);
 
     loadNext();
 }
@@ -352,14 +324,12 @@ function selectItem() {
     const selected = document.querySelector(
         'input[name="candidateSelect"]:checked'
     )
-    console.log(selected);
     if (!selected) {
         alert("Select a candidate");
         return;
     }
     const innerCode = selected.value;
-    console.log("Selected:", innerCode);
-
+    
     // Example:
     
     // Hide popup
@@ -386,12 +356,10 @@ async function extractDescription(text) {
         })
     })
     const data = await res.json();
-    console.log(data);
     const clean = data.llm_response
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
-    console.log(clean);
     try {
 
         const data = JSON.parse(clean);
