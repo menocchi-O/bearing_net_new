@@ -760,88 +760,49 @@ def get_details(codmat: str):
         "grpscoven": grpscoven
     }
 @app.get("/get_details_demo")
-def get_details_demo(innerCode: str):
+def get_details_demo(codmat: str):
     with conn.cursor(row_factory=dict_row) as cur:
-        sito = cur.execute(
-            """
+            cur.execute(
+            f"""
             SELECT sito
-            FROM DW_CATALOG_USE
-            WHERE id_interno = innerCode
+            FROM products_new
+            WHERE id_interno = '{codmat}'
             """
-        )
+            );
+            result = cur.fetchall();
+            sito = result[0]['sito'];
+            cur.execute(
+            f"""
+            SELECT ord_for, dispo_ven, giac, all_int, all_glo, ord_cli, lordo, netto, sco1, sco2, sco3, aum1, aum2, descrizione_estesa, descrizione_breve
+            FROM products_new
+            WHERE id_interno='{codmat}' AND sito='{sito}'
+            """
+            );
+            result = cur.fetchall();
+            print(result[0])
+    print(str(codmat));
+    print(str(sito));
 
+    if result[0]['descrizione_breve']=="":
+       desc = result[0]['descrizione_estesa'];
+    else: 
+        desc = result[0['descrizione_breve']];
 
     return  {
-                f"ordFor{sito}" : f"""
-                    SELECT ord_for
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"qtaDispo{sito}" : f"""
-                    SELECT dispo_ven
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"giac{sito}" : f"""
-                    SELECT giac
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"allInt{sito}" : f"""
-                    SELECT all_int
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"allGlo{sito}" : f"""
-                    SELECT all_glo
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"ordCli{sito}" : f"""
-                    SELECT ord_cli
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"pzoLordo{sito}" : f"""
-                    SELECT lordo
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"pzoNetto{sito}" : f"""
-                    SELECT netto
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"SCO1" : f"""
-                    SELECT sco1
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"SCO2" : f"""
-                    SELECT sco2
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"SCO3" : f"""
-                    SELECT sco3
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"AUM1" : f"""
-                    SELECT aum1
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"AUM2" : f"""
-                    SELECT aum2
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
-                f"desc" : f"""
-                    SELECT descrizione_breve
-                    FROM DW_CATALOG_USE
-                    WHERE id_interno={innerCode} AND sito={sito}
-                """,
+                f"ordFor{str(sito)}" : result[0]['ord_for'],
+                f"qtaDispo{sito}" : result[0]['dispo_ven'],
+                f"giac{sito}" : result[0]['giac'],
+                f"allInt{sito}" : result[0]['all_int'],
+                f"allGlo{sito}" : result[0]['all_glo'],
+                f"ordCli{sito}" : result[0]['ord_cli'],
+                f"pzoLordo" : result[0]['lordo'],
+                f"pzoNetto" : result[0]['netto'],
+                f"SCO1" : result[0]['sco1'],
+                f"SCO2" : result[0]['sco2'],
+                f"SCO3" : result[0]['sco3'],
+                f"AUM1" : result[0]['aum1'],
+                f"AUM2" : result[0]['aum2'],
+                f"desc" : desc,
                 "grpscoven": ""
 
         }       

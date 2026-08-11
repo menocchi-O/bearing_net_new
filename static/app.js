@@ -236,6 +236,7 @@ async function openDetailPanel(innerCode) {
     document.getElementById("2").value = "SITO 2"
     document.getElementById("3").value = "SITO 3"
     document.getElementById("4").value = "SITO 4"
+    
 
 
     const res = await fetch(`/get_details_demo?codmat=${encodeURIComponent(innerCode)}`,
@@ -245,45 +246,45 @@ async function openDetailPanel(innerCode) {
 
     const data = await res.json();
     
-    document.getElementById("disp1").value = data.qtaDispo1
-    document.getElementById("disp2").value = data.qtaDispo2
-    document.getElementById("disp3").value = data.qtaDispo3
-    document.getElementById("disp4").value = data.qtaDispo4
+    document.getElementById("disp1").value = data.qtaDispo1 || '0'
+    document.getElementById("disp2").value = data.qtaDispo2 || '0'
+    document.getElementById("disp3").value = data.qtaDispo3 || '0'
+    document.getElementById("disp4").value = data.qtaDispo4 || '0'
 
-    document.getElementById("giac1").value = data.giac1
-    document.getElementById("giac2").value = data.giac2
-    document.getElementById("giac3").value = data.giac3
-    document.getElementById("giac4").value = data.giac4
+    document.getElementById("giac1").value = data.giac1 || '0'
+    document.getElementById("giac2").value = data.giac2 || '0'
+    document.getElementById("giac3").value = data.giac3 || '0'
+    document.getElementById("giac4").value = data.giac4 || '0'
 
-    document.getElementById("allInt1").value = data.allInt1
-    document.getElementById("allInt2").value = data.allInt2
-    document.getElementById("allInt3").value = data.allInt3
-    document.getElementById("allInt4").value = data.allInt4
+    document.getElementById("allInt1").value = data.allInt1 || '0'
+    document.getElementById("allInt2").value = data.allInt2 || '0'
+    document.getElementById("allInt3").value = data.allInt3 || '0'
+    document.getElementById("allInt4").value = data.allInt4 || '0'
 
-    document.getElementById("allGlo1").value = data.allGlo1
-    document.getElementById("allGlo2").value = data.allGlo2
-    document.getElementById("allGlo3").value = data.allGlo3
-    document.getElementById("allGlo4").value = data.allGlo4
+    document.getElementById("allGlo1").value = data.allGlo1 || '0'
+    document.getElementById("allGlo2").value = data.allGlo2 || '0'
+    document.getElementById("allGlo3").value = data.allGlo3 || '0'
+    document.getElementById("allGlo4").value = data.allGlo4 || '0'
 
-    document.getElementById("ordFor1").value = data.qtaOrdFor1
-    document.getElementById("ordFor2").value = data.qtaOrdFor2
-    document.getElementById("ordFor3").value = data.qtaOrdFor3
-    document.getElementById("ordFor4").value = data.qtaOrdFor4
+    document.getElementById("ordFor1").value = data.ordFor1 || '0'
+    document.getElementById("ordFor2").value = data.ordFor2 || '0'
+    document.getElementById("ordFor3").value = data.ordFor3 || '0'
+    document.getElementById("ordFor4").value = data.ordFor4 || '0'
 
-    document.getElementById("ordCli1").value = data.ordCli1
-    document.getElementById("ordCli2").value = data.ordCli2
-    document.getElementById("ordCli3").value = data.ordCli3
-    document.getElementById("ordCli4").value = data.ordCli4
+    document.getElementById("ordCli1").value = data.ordCli1 || '0'
+    document.getElementById("ordCli2").value = data.ordCli2 || '0'
+    document.getElementById("ordCli3").value = data.ordCli3 || '0'
+    document.getElementById("ordCli4").value = data.ordCli4 || '0'
 
-    document.getElementById("discount1").value = data.SCO1
-    document.getElementById("discount2").value = data.SCO2
-    document.getElementById("discount3").value = data.SCO3
-    document.getElementById("aumento1").value = data.AUM1
-    document.getElementById("aumento2").value = data.AUM2
+    document.getElementById("discount1").value = data.SCO1 || '0' 
+    document.getElementById("discount2").value = data.SCO2 || '0'
+    document.getElementById("discount3").value = data.SCO3 || '0'
+    document.getElementById("aumento1").value = data.AUM1 || '0'
+    document.getElementById("aumento2").value = data.AUM2 || '0'
     document.getElementById("netPrice").value = data.pzoNetto
     document.getElementById("grossPrice").value = data.pzoLordo
-    document.getElementById("description").value = data.desc
-    document.getElementById("grpscoven").value = data.grpscoven
+    document.getElementById("description").value = data.desc || ""
+    document.getElementById("grpscoven").value = data.grpscoven || ""
 
     document.getElementById("detailPanel").classList.remove("hidden");
 }
