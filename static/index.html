@@ -11,7 +11,7 @@
         <div class="dashboard">
 
             <!-- TOP LEFT -->
-            <section class="panel email-panel">
+            <section id="emailPanel" class="panel email-panel">
                 <div class="panel-header">
                     <h2>Current Email</h2>
                 </div>
@@ -25,7 +25,25 @@
                     <button class="success" onclick="extract()">Extract</button>
                 </div>
             </section>
+            <!-- TOUR OVERLAY -->
+            <div id="tourOverlay" class="tour-overlay"></div>
 
+            <div id="tourCard" class="tour-card">
+                <div class="tour-step">1 / 4</div>
+
+                <h3>Start with the customer email</h3>
+
+                <p>
+                    Paste the customer's inquiry here. The application can work
+                    with unstructured emails and extract the product information
+                    needed for the catalog search.
+                </p>
+
+                <div class="tour-actions">
+                    <button class="tour-skip" onclick="skipTour()">Skip tour</button>
+                    <button class="tour-next" onclick="nextTourStep()">Next →</button>
+                </div>
+            </div>
             <!-- TOP RIGHT -->
             <section class="panel data-panel">
                 <div class="panel-header">

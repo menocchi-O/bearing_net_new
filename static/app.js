@@ -9,6 +9,7 @@ tbody.addEventListener("change", (event) => {
         loadLineItem(item);
     }
 })
+
 async function clean() {
     const text = document.getElementById("emailInput").value;
     document.getElementById("cleanedText").value = ""; // placeholder
@@ -376,4 +377,228 @@ async function extractDescription(text) {
 
 document.addEventListener("DOMContentLoaded", function () {
     loadNext();
+    startTour();
 });
+
+const tourSteps = [
+    {
+        element: "#emailPanel",
+        title: "Start with the customer email",
+        text:
+            "Paste the customer's inquiry here. " +
+            "The application can work with unstructured emails " +
+            "and extract the product information needed for the catalog search."
+    }
+];
+
+let currentTourStep = 0;
+
+window.addEventListener("resize", function () {
+    const step = tourSteps[currentTourStep];
+
+    if (!step) return;
+    const element = document.querySelector(step.element);
+    if (!element) return;
+
+    requestAnimationFrame(() => {
+        positionTourCard(element);
+    });
+
+});
+
+window.addEventListener("scroll", function () {
+    const step = tourSteps[currentTourStep];
+
+    if (!step) return;
+    const element = document.querySelector(step.element);
+
+    if (element) {
+        positionTourCard(element);
+    }
+
+});
+function startTour() {
+    currentTourStep = 0;
+
+    document
+        .getElementById("tourOverlay")
+        .classList.add("active");
+
+    document
+        .getElementById("tourCard")
+        .classList.add("active");
+
+    showTourStep();
+}
+
+function showTourStep() {
+
+    // Remove previous highlight
+    document
+        .querySelectorAll(".tour-highlight")
+        .forEach(el => el.classList.remove("tour-highlight"));
+
+    const step = tourSteps[currentTourStep];
+
+    const element = document.querySelector(step.element);
+
+    if (!element) {
+        console.error("Tour element not found:", step.element);
+        return;
+    }
+
+    element.classList.add("tour-highlight");
+
+    // Update card
+    document.querySelector(".tour-step").textContent =
+        `${currentTourStep + 1} / ${tourSteps.length}`;
+
+    document.querySelector(".tour-card h3").textContent =
+        step.title;
+
+    document.querySelector(".tour-card p").textContent =
+        step.text;
+
+    // Put the card underneath the highlighted element
+    positionTourCard(element);
+}
+
+function positionTourCard(element) {
+
+    const card = document.getElementById("tourCard");
+    const rect = element.getBoundingClientRect();
+
+    const margin = 20;
+    const gap = 16;
+
+    const cardWidth = card.offsetWidth;
+    const cardHeight = card.offsetHeight;
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let left;
+    let top;
+
+    /*
+     * 1. Try BELOW the element
+     */
+    left = rect.left + (rect.width - cardWidth) / 2;
+    top = rect.bottom + gap;
+
+    if (
+        top + cardHeight <= viewportHeight - margin &&
+        left >= margin &&
+        left + cardWidth <= viewportWidth - margin
+    ) {
+        setCardPosition(left, top);
+        return;
+    }
+
+    /*
+     * 2. Try ABOVE the element
+     */
+    left = rect.left + (rect.width - cardWidth) / 2;
+    top = rect.top - cardHeight - gap;
+
+    if (
+        top >= margin &&
+        left >= margin &&
+        left + cardWidth <= viewportWidth - margin
+    ) {
+        setCardPosition(left, top);
+        return;
+    }
+
+    /*
+     * 3. Try RIGHT
+     */
+    left = rect.right + gap;
+    top = rect.top + (rect.height - cardHeight) / 2;
+
+    if (
+        left + cardWidth <= viewportWidth - margin &&
+        top >= margin &&
+        top + cardHeight <= viewportHeight - margin
+    ) {
+        setCardPosition(left, top);
+        return;
+    }
+
+    /*
+     * 4. Try LEFT
+     */
+    left = rect.left - cardWidth - gap;
+    top = rect.top + (rect.height - cardHeight) / 2;
+
+    if (
+        left >= margin &&
+        top >= margin &&
+        top + cardHeight <= viewportHeight - margin
+    ) {
+        setCardPosition(left, top);
+        return;
+    }
+
+    /*
+     * 5. Nothing fits perfectly.
+     *    Put it below and constrain it to the viewport.
+     */
+    left = Math.max(
+        margin,
+        Math.min(
+            left,
+            viewportWidth - cardWidth - margin
+        )
+    );
+
+    top = Math.max(
+        margin,
+        Math.min(
+            rect.bottom + gap,
+            viewportHeight - cardHeight - margin
+        )
+    );
+
+    setCardPosition(left, top);
+}
+
+
+function setCardPosition(left, top) {
+
+    const card = document.getElementById("tourCard");
+
+    card.style.left = `${left}px`;
+    card.style.top = `${top}px`;
+}
+
+function nextTourStep() {
+
+    if (currentTourStep >= tourSteps.length - 1) {
+        endTour();
+        return;
+    }
+
+    currentTourStep++;
+
+    showTourStep();
+}
+
+function skipTour() {
+    endTour();
+}
+
+function endTour() {
+
+    document
+        .querySelectorAll(".tour-highlight")
+        .forEach(el => el.classList.remove("tour-highlight"));
+
+    document
+        .getElementById("tourOverlay")
+        .classList.remove("active");
+
+    document
+        .getElementById("tourCard")
+        .classList.remove("active");
+}

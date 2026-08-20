@@ -17,7 +17,7 @@ CUSCINETTO 6012 (60*95*18)
 
  
 
-In attesa",05/07/2026,,
+In attesa",05/07/2026,true,skipped
 2,B,CLIENTE_1,RICHIESTA QUOTAZIONE,"Buongiorno,
 La presente per chiedere offerta per:
 
@@ -25,12 +25,12 @@ Pz 200 BOCCOLA BRONZO SINT.CILIND:BR 22X28X30
 
 Resto in attesa di un Vostro gentile riscontro
 
-Grazie",05/07/2026,,
+Grazie",05/07/2026,true,skipped
 3,C,MANUTENTORE_1,INQUIRY,"Buongiorno
  
 Mi dareste il costo aggiornato.
  
-N° 4pz. CUSC. ORIENTABILE A RULLI 22214",03/07/2026,,
+N° 4pz. CUSC. ORIENTABILE A RULLI 22214",03/07/2026,true,skipped
 4,D,CLIENTE_2,OFFERTA,"Buongiorno, ci necessita cortesemente entro questa mattina vs. migliore offerta e verifica tempi di consegna/disponibilità per:
  
 n.2   Sopporti SKF SNL 507
