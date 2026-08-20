@@ -385,9 +385,50 @@ const tourSteps = [
         element: "#emailPanel",
         title: "Start with the customer email",
         text:
-            "Paste the customer's inquiry here. " +
+            "Paste the customer's inquiry here or let it flow directly from your email box. " +
             "The application can work with unstructured emails " +
             "and extract the product information needed for the catalog search."
+    },
+    {
+        element: "#extractBtn",
+        title: "Extract from pre-formatted emails",
+        text:
+            "If you receive pre-formatted inquiries, " +
+            "you can link a set of reg-ex to this button " +
+            "and extract all the required fields."
+    },
+    {
+        element: "#cleanBtn",
+        title: "Protect confidential information",
+        text:
+            "Otherwise you can submit the text to an LLM. " +
+            "Before you do that, make sure to clear the text from confidential information " +
+            "such as signature, telephone number, VAT number etc."
+    },
+    {
+        element: "#clearedText",
+        title: "Submit the text to generative AI",
+        text:
+            "The LLM is prompted to search for " +
+            "lines of a customer inquiry: " +
+            "code, description, quantity etc."
+    },
+    {
+        element: "#offerLines",
+        title: "Table containing the list of requested items",
+        text:
+            "By selecting a row " +
+            "the corresponding data will be loaded " +
+            "in the \"Extracted Data\" form"
+    },
+    {
+        element: "#extractedData",
+        title: "Match the email code with your company code",
+        text:
+            "When you press the button, " +
+            "If a product code is available, the catalog is searched directly. " +
+            "Otherwise, the description is used for semantic matching. " +
+            "Product descriptions are converted into embeddings and compared against the PostgreSQL catalog using pgvector."
     }
 ];
 

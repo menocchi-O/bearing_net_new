@@ -21,8 +21,8 @@
 
                 <div class="actions">
                     <button class="secondary" onclick="skip()">Skip</button>
-                    <button class="primary" onclick="clean()">Clean</button>
-                    <button class="success" onclick="extract()">Extract</button>
+                    <button id="cleanBtn" class="primary" onclick="clean()">Clean</button>
+                    <button id="extractBtn" class="success" onclick="extract()">Extract</button>
                 </div>
             </section>
             <!-- TOUR OVERLAY -->
@@ -31,12 +31,9 @@
             <div id="tourCard" class="tour-card">
                 <div class="tour-step">1 / 4</div>
 
-                <h3>Start with the customer email</h3>
+                <h3></h3>
 
                 <p>
-                    Paste the customer's inquiry here. The application can work
-                    with unstructured emails and extract the product information
-                    needed for the catalog search.
                 </p>
 
                 <div class="tour-actions">
@@ -45,7 +42,7 @@
                 </div>
             </div>
             <!-- TOP RIGHT -->
-            <section class="panel data-panel">
+            <section id="extractedData" class="panel data-panel">
                 <div class="panel-header">
                     <h2>Extracted Data</h2>
                 </div>
@@ -68,7 +65,7 @@
             </section>
 
             <!-- BOTTOM -->
-            <section class="panel cleaned-panel">
+            <section id="clearedText" class="panel cleaned-panel">
                 <div class="panel-header">
                     <h2>Cleaned Text</h2>
                 </div>
@@ -82,7 +79,7 @@
                     </button>
                 </div>
             </section>
-            <section class="panel">
+            <section id="offerLines" class="panel">
                 <div class="panel-header">
                     <h2>Offer Lines</h2>
                 </div>
