@@ -120,6 +120,8 @@ async function loadLineItem(item) {
 
 async function searchCode() {
     item_code = document.getElementById("articolo").value;
+    description = document.getElementById("note").value;
+    if (!item_code && !description) return;
     let res;
 
     if (item_code) {
@@ -206,6 +208,44 @@ async function loadNext() {
     const res = await fetch("/next");
     const data = await res.json();
 
+
+    document.getElementById("giac1").value = '0'
+    document.getElementById("giac2").value = '0'
+    document.getElementById("giac3").value = '0'
+    document.getElementById("giac4").value = '0'
+
+    document.getElementById("allInt1").value = '0'
+    document.getElementById("allInt2").value = '0'
+    document.getElementById("allInt3").value = '0'
+    document.getElementById("allInt4").value = '0'
+
+    document.getElementById("allGlo1").value = '0'
+    document.getElementById("allGlo2").value = '0'
+    document.getElementById("allGlo3").value = '0'
+    document.getElementById("allGlo4").value = '0'
+
+    document.getElementById("ordFor1").value = '0'
+    document.getElementById("ordFor2").value = '0'
+    document.getElementById("ordFor3").value = '0'
+    document.getElementById("ordFor4").value = '0'
+
+    document.getElementById("ordCli1").value = '0'
+    document.getElementById("ordCli2").value = '0'
+    document.getElementById("ordCli3").value = '0'
+    document.getElementById("ordCli4").value = '0'
+
+    document.getElementById("discount1").value = '0'
+    document.getElementById("discount2").value = '0'
+    document.getElementById("discount3").value = '0'
+    document.getElementById("aumento1").value = '0'
+    document.getElementById("aumento2").value = '0'
+    document.getElementById("netPrice").value = ""
+    document.getElementById("grossPrice").value = ""
+    document.getElementById("description").value = ""
+    document.getElementById("grpscoven").value = ""
+
+    document.getElementById("replyBox").value="";
+
     if (data.status === "done") {
         document.getElementById("emailInput").value = "";
         alert("All emails processed!")
@@ -215,6 +255,9 @@ async function loadNext() {
     document.getElementById("emailInput").value = data.email;
     // document.getElementById("output").value = "";  // 👈 IMPORTANT
     window.currentID = data.id;
+
+    // clear previous rows
+    tbody.innerHTML = "";
 }
 
 async function skip() {
@@ -291,34 +334,36 @@ async function openDetailPanel(innerCode) {
 }
 
 async function sendReply() {
-    const email = document.getElementById("emailInput").value;
-    const edited_email = document.getElementById("cleanedText").value;
-    const llm_response = document.getElementById("llmResponse").value;
-    const required_code = document.getElementById("articolo").value;
-    const supplier_code = document.getElementById("articolo").value;
-    const inner_code = document.getElementById("innerCode").value;
-    const marca = document.getElementById("marca").value;
-    const reply = document.getElementById("replyBox").value;
-    const reply_address = document.getElementById("replyAddress").value;
-    
+    //const email = document.getElementById("emailInput").value;
+    //const edited_email = document.getElementById("cleanedText").value;
+    //const llm_response = document.getElementById("llmResponse").value;
+    //const required_code = document.getElementById("articolo").value;
+    //const supplier_code = document.getElementById("articolo").value;
+    //const inner_code = document.getElementById("innerCode").value;
+    //const marca = document.getElementById("marca").value;
+    //const reply = document.getElementById("replyBox").value;
+    //const reply_address = document.getElementById("replyAddress").value;
+
     const res = await fetch("/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            id: parseInt(window.currentID),
-            original_email: email || "",
-            web_email: edited_email || "",
-            llm_response: llm_response || "",
-            required_code: required_code || "",
-            supplier_code: supplier_code || "",
-            inner_code: inner_code || "",
-            required_brand: marca || "",
-            email_response: reply || "",
-            reply_address: reply_address || ""
+              id: parseInt(window.currentID),
+              original_email: email || "",
+              web_email: edited_email || "",
+              llm_response: llm_response || "",
+              required_code: required_code || "",
+              supplier_code: supplier_code || "",
+              inner_code: inner_code || "",
+              required_brand: marca || "",
+              email_response: reply || "",
+              reply_address: reply_address || ""
         })
     })
 
-    const data = await res.json();
+    //const data = await res.json();
+
+    alert("E-mail successfully sent");
 
     loadNext();
 }

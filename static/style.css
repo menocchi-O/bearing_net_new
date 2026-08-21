@@ -1,9 +1,11 @@
+
 .dashboard {
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 2fr 0.5fr;
     gap: 20px;
     height: 100vh;
+    box-sizing: border-box;
 }
 
 .email-panel {
@@ -24,6 +26,20 @@
 .offer-lines {
     grid-column: 2;
     grid-row: 2;
+
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.offer-lines .panel-header {
+    flex-shrink: 0;
+}
+
+.offer-lines .table-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .panel {
@@ -325,3 +341,14 @@ button {
     background: #222;
     color: white;
 }
+
+#linesTable {
+    border-collapse: collapse;
+}
+
+    #linesTable thead {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1;
+    }

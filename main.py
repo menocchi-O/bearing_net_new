@@ -354,20 +354,20 @@ def is_ending_sentence(sentence):
 ### MARK AS READ - SAVE TO DB ###
 @app.post("/save")
 def save_email(req: SaveRequest):
-    record = {
-        "id": req.id,
-        "original_email": req.original_email,
-        "web_email": req.web_email,
-        "llm_response": req.llm_response,
-        "required_code": req.required_code,
-        "supplier_code": req.supplier_code,
-        "inner_code": req.inner_code,
-        "required_brand": req.required_brand,
-        "email_response": req.email_response,
-        "reply_address": req.reply_address
-    }
-    save_example(record)
-    send_reply(record)
+    # record = {
+    #     "id": req.id,
+    #     "original_email": req.original_email,
+    #     "web_email": req.web_email,
+    #     "llm_response": req.llm_response,
+    #     "required_code": req.required_code,
+    #     "supplier_code": req.supplier_code,
+    #     "inner_code": req.inner_code,
+    #     "required_brand": req.required_brand,
+    #     "email_response": req.email_response,
+    #     "reply_address": req.reply_address
+    # }
+    # save_example(record)
+    # send_reply(record)
     mark_as_processed(req.id, req.original_email)
     return {"status": "saved"}
 
@@ -398,6 +398,7 @@ def search_item(q: str):
             )
 
             rows = cur.fetchall()
+            
             scored = [
                 {
                     "status": "review",
@@ -407,7 +408,8 @@ def search_item(q: str):
                     "description": row["descrizione_estesa"],
                     "score": row["score"],
                 }
-            for row in rows
+            for row in rows 
+            if row["score"] is not None and row["score"]>0.4
             ]
     return scored;
 

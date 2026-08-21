@@ -37,7 +37,7 @@ n.2   Sopporti SKF SNL 507
 n.2   Coppie tenute SKF TSN 507 L (TXL507)
 n.2   Cuscinetto SKF 2207K
 n.2   Bussola SKF H307
-n.2   Anelli arresto SKF FRB 5.5/72",05/07/2026,,
+n.2   Anelli arresto SKF FRB 5.5/72",05/07/2026,true,skipped
 5,E,RIVENDITORE_2,INQUIRY REQUEST,"Inquiry no QTY26-016-2289PO
  
 No.
@@ -52,7 +52,7 @@ Comment
 TIMKEN
 Double row tapered roller bearing
 2
-pcs",27/07/2026,,
+pcs",27/07/2026,true,skipped
 6,F,MANUTENTORE_2,RICHIESTA QUOTAZIONE,"Buongiorno,
 mi servirebbe sapere costi e disponibilità per il seguente materiale , nel dettaglio :
  
@@ -62,10 +62,10 @@ I.ME.TO.MAGR.0002.05 Mole a Disco Grigie - 7000G 150 20M- SCU            N.2
 I.ME.TR.BEFL.0001.05 Supporto a Flangia 3 Fori UCFB 204 D.20 (Ghisa)    N.6
  
 In attesa vostro riscontro
-Cordiali Saluti",12/07/2026,,
+Cordiali Saluti",12/07/2026,true,skipped
 7,G,CLIENTE_5,RICHIESTA OFFERTA,"Buonasera, avrei bisogno di acquistare 4 elettrovalvole come quella nell'immagine allegata.
 Riuscite a quotarcele?
-Ringrazio anticipatamente e saluto",05/07/2026,,
+Ringrazio anticipatamente e saluto",05/07/2026,true,skipped
 8,H,RIVENDITORE_8,RICHIESTA DI OFFERTA,"Buongiorno,
  
 per cortesia, fornire vostro migliore offerta per quanto riportato di seguito:
@@ -92,7 +92,7 @@ Resto a disposizione per qualsiasi chiarimento o delucidazione in merito alle sp
 Vi prego di rispondere facendo riferimento alla presente e-mail per facilitare la gestione degli ordini.
  
 Grazie per la collaborazione.
-Cordiali Saluti - Best Regards",05/07/2026,,
+Cordiali Saluti - Best Regards",05/07/2026,true,skipped
 9,I,RIVENDITORE_3,OFFERTA FORNITORE,"Buongiorno,
 
 con la presente siamo a chiedere Vostre migliori condizioni per l’eventuale fornitura di:
