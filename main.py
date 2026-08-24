@@ -107,7 +107,7 @@ SALUTATION_PATTERN = [
     "distinti", "saluti",
     "kind regards", "rergards",
     "cordialmente", "buona giornata",
-    "informativa", "warning"
+    "informativa", "warning", "in attesa"
 ]
 
 ### AI REQUEST ###
