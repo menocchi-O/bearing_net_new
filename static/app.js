@@ -334,15 +334,14 @@ async function openDetailPanel(innerCode) {
 }
 
 async function sendReply() {
-    //const email = document.getElementById("emailInput").value;
-    //const edited_email = document.getElementById("cleanedText").value;
-    //const llm_response = document.getElementById("llmResponse").value;
-    //const required_code = document.getElementById("articolo").value;
-    //const supplier_code = document.getElementById("articolo").value;
-    //const inner_code = document.getElementById("innerCode").value;
-    //const marca = document.getElementById("marca").value;
-    //const reply = document.getElementById("replyBox").value;
-    //const reply_address = document.getElementById("replyAddress").value;
+    const email = document.getElementById("emailInput").value;
+    const edited_email = document.getElementById("cleanedText").value;
+    const required_code = document.getElementById("articolo").value;
+    const supplier_code = document.getElementById("articolo").value;
+    const inner_code = document.getElementById("innerCode").value;
+    const marca = document.getElementById("marca").value;
+    const reply = document.getElementById("replyBox").value;
+    const reply_address = document.getElementById("replyAddress").value;
 
     const res = await fetch("/save", {
         method: "POST",
@@ -351,7 +350,6 @@ async function sendReply() {
               id: parseInt(window.currentID),
               original_email: email || "",
               web_email: edited_email || "",
-              llm_response: llm_response || "",
               required_code: required_code || "",
               supplier_code: supplier_code || "",
               inner_code: inner_code || "",

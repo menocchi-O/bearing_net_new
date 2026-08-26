@@ -1,4 +1,5 @@
 # This is supposed to be a change applying only to demo_BearingNet branch
+from hmac import new
 from plistlib import UID
 from sys import deactivate_stack_trampoline
 
@@ -107,7 +108,7 @@ SALUTATION_PATTERN = [
     "distinti", "saluti",
     "kind regards", "rergards",
     "cordialmente", "buona giornata",
-    "informativa", "warning", "in attesa"
+    "informativa", "warning", "in attesa", "cordialit"
 ]
 
 ### AI REQUEST ###
@@ -358,7 +359,6 @@ def save_email(req: SaveRequest):
     #     "id": req.id,
     #     "original_email": req.original_email,
     #     "web_email": req.web_email,
-    #     "llm_response": req.llm_response,
     #     "required_code": req.required_code,
     #     "supplier_code": req.supplier_code,
     #     "inner_code": req.inner_code,
@@ -788,7 +788,7 @@ def get_details_demo(codmat: str):
     if result[0]['descrizione_breve']=="":
        desc = result[0]['descrizione_estesa'];
     else: 
-        desc = result[0['descrizione_breve']];
+        desc = result[0]['descrizione_breve'];
 
     return  {
                 f"ordFor{str(sito)}" : result[0]['ord_for'],
@@ -977,6 +977,17 @@ def save_example(data):
 ### DASHBOARD ###
 @app.get("/")
 def index():
+    print("app is starting");
+    with open(CSV_FILE_DEMO, newline='') as f:
+        rows = list(csv.DictReader(f, delimiter=','))
+    for row in rows:
+        row['Processed']="";
+        row['Status']="";
+    with open(CSV_FILE_DEMO, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
     return FileResponse("static/index.html")
 @app.on_event("startup")
 def startup_event():

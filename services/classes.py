@@ -26,7 +26,6 @@ class SaveRequest(BaseModel):
     id:int
     original_email: str
     web_email: str
-    llm_response: str
     required_code: str
     supplier_code: str
     inner_code: str
